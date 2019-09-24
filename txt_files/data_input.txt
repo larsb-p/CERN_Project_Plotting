@@ -1,0 +1,6 @@
+data_files/sensors_04_07-05_07_2019.csv
+data_files/sensors_06_07-07_07_2019.csv
+data_files/sensors_08_07-09_07_2019.csv
+data_files/sensors_10_07-11_07_2019.csv
+data_files/sensors_12_07-13_07_2019.csv
+data_files/sensors_14_07-15_07_2019.csv
