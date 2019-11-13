@@ -35,7 +35,7 @@ double *temperature_coeff;
 
 int k = 0;
 
-double* pressure_coefficients( std::string coeff_file, int lo ) {
+double* pressure_coefficients( std::string coeff_file ) {
 
     static double r[N_SENSORS_CONST_TOTAL];
     std::ifstream inFile;
@@ -65,7 +65,7 @@ double* pressure_coefficients( std::string coeff_file, int lo ) {
 }
 
 
-double* temperature_coefficients( std::string coeff_file, int lo ) {
+double* temperature_coefficients( std::string coeff_file ) {
 
     std::ifstream inFile;
     inFile.open( coeff_file );
@@ -160,11 +160,11 @@ void create_variable_file( int lo ) {
     std::ifstream input_file( input_filename );
     std::string data_filename;
 
-    pressure_coeff = pressure_coefficients( coeff_file_pressure, lo );
-    temperature_coeff = temperature_coefficients( coeff_file_temperature, lo );
+    pressure_coeff = pressure_coefficients( coeff_file_pressure );
+    temperature_coeff = temperature_coefficients( coeff_file_temperature );
 
-    cout << "Pressure " << *( pressure_coeff + lo ) << endl;
-    cout << "Temperature " << *( temperature_coeff + lo ) << endl;
+    cout << "Pressure: " << *( pressure_coeff + lo ) << endl;
+    cout << "Temperature: " << *( temperature_coeff + lo ) << endl;
 
     ofstream outFile;
     outFile.open("txt_files/sensors_name_id.txt");
@@ -242,15 +242,15 @@ void create_variable_file( int lo ) {
 	++file_num;
 
         date = data_filename.substr(19,16);
-        cout << data_filename << endl;
-        cout << "Date: [" << date  << "] (from to [dd_mm-dd_mm_year])" << endl;
+        cout << "Start of file:" << data_filename << endl;
+        cout << "Date: [" << date  << "] (from to [dd_mm-dd_mm_yyyy])" << endl;
 
         ifstream inFile;
  
         inFile.open(data_filename.c_str());
 
         if (inFile.is_open()) {
-            cout << "File '" << data_filename << "' has been opened" << endl;
+            cout << "File '" << data_filename << "' has been opened." << endl;
         }
         else {
             cout << "NO FILE HAS BEEN OPENED" << endl;
@@ -272,7 +272,7 @@ void create_variable_file( int lo ) {
                 int cmax = 0; // counts columns of maximum length in csv-file
                 int t = 0; // to change index of array that stores the last column lengths of sensor columns
 
-                cout << "End of file '" << data_filename << "' at " << i << endl;
+                cout << "End of file: '" << data_filename << "' at " << i << endl << endl;
 
 	        // Reset variables for reading next .csv-file
                 i = 1;
@@ -300,7 +300,7 @@ void create_variable_file( int lo ) {
                 std::stringstream iss(sensor_id);
               	iss >> sensor_ID;
 //              cout << sensor_ID << endl;
-//	        cout << sensor_name << " at " << lo << endl;
+	        cout << "Sensor name: " << sensor_name << " at " << lo << endl;
 //	        sensorID.push_back( sensor_ID[kk-k] );
 	        N_SENSORS = row.size()/2;
 	        const int N_SENSORS_CONST = row.size()/2;
@@ -474,11 +474,11 @@ void create_variable_file( int lo ) {
 
     // Save one temperature sensor in an extra .root-file for the temperature correction
     if ( sensor_name.find("TT_ambience_Top") != std::string::npos ) {
-        TFile* f2 = new TFile( "root_files/file_TT_ambiance_Top.root", "RECREATE");
+        TFile* f2 = new TFile( "root_files/file_TT_ambiance_Top.root", "CREATE");
         TTree *newtree = tree->CloneTree();
         newtree->Write("", TObject::kOverwrite);
         f2->Close();
-        cout << "File 'root_files/file_TT_ambiance_Top.root' has been created for the temperature correction." << endl;
+        cout << "File 'root_files/file_TT_ambiance_Top.root' with TTree 'data' has been created for the temperature correction." << endl << endl;
     }
     // Close file
     f->Close();
