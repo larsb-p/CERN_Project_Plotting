@@ -14,7 +14,7 @@
 # Hereby 'x' is an integer labeling the x-th sensor that is readout (from first to last columns in .csv-files) and
 # 'plot_start' is a string determining where the plotting starts. By default, when setting 
 
-#	* 'plot_start = "user_defined"' -> Plotting starts from start of filling time
+#       * 'plot_start = "user_defined"' -> Plotting starts from start of filling time
 #       * 'plot_start = "anything else"' -> Plotting starts from beginning of dataset in .csv-files .
 
 # The start of the plotting can be changed by modifying line 101 and uncommenting line 295 (and commenting line 294),
@@ -29,15 +29,22 @@
 
 
 #!/bin/bash
-   root -l -q -b 'get_column_length.C'
 rm 'txt_files/root_path_file.txt'
-for m in {40..40}; do 
+rm root_files/*.root
+   root -l -q -b 'get_column_length.C'
+   root -l -q -b 'create_variable_file.C(63)'
+   root -l -q -b 'make_variable_corrections.C'
+rm 'root_files/file_TT_ambiance_Top.root'
+mv root_files/column_count.root .
+mv root_files/*.root root_files/file_TT_ambiance_Top.root
+printf "File 'root_files/file_TT_ambiance_Top.root' with TTree 'corrections' has been created for the temperature correction.\n"
+mv column_count.root root_files/
+rm 'txt_files/root_path_file.txt'
+for m in {0..63}; do
    root -l -q -b 'create_variable_file.C('$m')'
 done
    root -l -q -b 'make_variable_corrections.C'
-rm 'root_files/merged_file.root'
    root -l -q -b 'merge_root_files.C'
-rm 'root_files/plots.root'
-for m in {40..40}; do
+for m in {0..63}; do
    root -l -q -b 'make_plots.C('$m', "user_defined")'
 done
