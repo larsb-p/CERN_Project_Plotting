@@ -248,7 +248,7 @@ void make_variable_corrections( ) {
             if ( time_difference > abs( start_of_plots_time_value.Convert() - time_val->at(uu) ) ) {
                 time_difference = abs( start_of_plots_time_value.Convert() - time_val->at(uu) );
                 plots_index = uu;
-           }
+            }
         }
         cout << "Difference of closest time to set plots starting time: " << time_difference << " s" <<  endl;
         time_difference = 999; // Reset

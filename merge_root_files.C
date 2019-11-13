@@ -6,7 +6,7 @@
 // It takes 
 
 //      * 'txt_files/root_path_file.txt'
-//	* 'root_files/file_*.root'
+//      * 'root_files/file_*.root'
 
 // as inputs to create a new .root-file called 'merged_file.root' in the 'root_files/' directory.
 // After starting root, this script can be run by typing: .x merge_root_files.C()
@@ -19,30 +19,31 @@
 
 void merge_root_files() {
 
-	TChain chain("data");
-	TChain chain2("corrections");
-	std::ifstream input_root_files("txt_files/root_path_file.txt");
+        TChain chain("data");
+        TChain chain2("corrections");
+        std::ifstream input_root_files("txt_files/root_path_file.txt");
 
-	if (input_root_files.is_open()) {
-		cout << "File" << " has been opened" << endl;
-	}
-	else {
-		cout << "NO FILE HAS BEEN OPENED" << endl;
-	}
+        if (input_root_files.is_open()) {
+                cout << "File" << " has been opened" << endl;
+        }
+        else {
+                cout << "NO FILE HAS BEEN OPENED" << endl;
+                exit(0);
+        }
 
-	std::string line;
-	
-	while ( std::getline( input_root_files, line ) ) {
-		chain.Add( line.c_str() );
-		chain2.Add( line.c_str() );
-		cout << "line " <<  line << endl;
-	}
+        std::string line;
 
-	TFile* f = new TFile( "root_files/merged_file.root", "RECREATE" );
+        while ( std::getline( input_root_files, line ) ) {
+                chain.Add( line.c_str() );
+                chain2.Add( line.c_str() );
+                cout << "line " <<  line << endl;
+        }
 
-	chain.CloneTree( -1, "fast" );
-	chain2.CloneTree( -1, "fast" );
-	f->Write();	
+        TFile* f = new TFile( "root_files/merged_file.root", "RECREATE" );
 
-	return 0;
+        chain.CloneTree( -1, "fast" );
+        chain2.CloneTree( -1, "fast" );
+        f->Write();
+
+        return 0;
 }

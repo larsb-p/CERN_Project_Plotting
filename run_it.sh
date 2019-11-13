@@ -40,11 +40,11 @@ mv root_files/*.root root_files/file_TT_ambiance_Top.root
 printf "File 'root_files/file_TT_ambiance_Top.root' with TTree 'corrections' has been created for the temperature correction.\n"
 mv column_count.root root_files/
 rm 'txt_files/root_path_file.txt'
-for m in {0..63}; do
+for m in {48..48}; do
    root -l -q -b 'create_variable_file.C('$m')'
 done
    root -l -q -b 'make_variable_corrections.C'
    root -l -q -b 'merge_root_files.C'
-for m in {0..63}; do
+for m in {48..48}; do
    root -l -q -b 'make_plots.C('$m', "user_defined")'
 done

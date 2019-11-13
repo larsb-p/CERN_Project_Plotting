@@ -149,6 +149,7 @@ class plot_maker {
                 cout << "Making plot for sensor " << fSensorName << " (" << fSensorID << ")" << endl;
 
                 graphs = this->build_graphs_from_root( sensor_name, sensor_ID, m, start ); // build graphs using function
+
                 fPlotColor = plot_color;
 
                 return std::pair< std::string, std::vector<TGraph*> >( fSensorName, graphs);
@@ -242,6 +243,23 @@ class plot_maker {
 
                         this->graph_settings( *temp_graph, graph_name ); // Apply function to set graph settings
                         graphs.push_back( temp_graph );
+
+                        // There are no further corrections for values of temperature and pressure sensors -> skip these
+//                      if ( fPlotMode == plot_mode::temperature || fPlotMode == plot_mode::pressure ) continue;
+
+                        double *vxs4 = fSensorTreeCorr->GetVal(2);
+
+                        // Create temporary TGraph for zeroed data
+                        TGraph *temp_graph_zeroed = new TGraph(numm, vx, vxs4);
+                        this->graph_settings( *temp_graph_zeroed, graph_name );
+                        graphs.push_back( temp_graph_zeroed );
+
+                        double *vxs3 = fSensorTreeCorr->GetVal(3);
+
+                        // Create temporary TGraph for zeroed and moving average corrected data
+                        TGraph *temp_graph_moving_average = new TGraph(numm, vx, vxs3);
+                        this->graph_settings( *temp_graph_moving_average, graph_name );
+                        graphs.push_back( temp_graph_moving_average );
 
                         // There are no further corrections for values of temperature and pressure sensors -> skip these
                         if ( fPlotMode == plot_mode::temperature || fPlotMode == plot_mode::pressure ) continue;
@@ -339,7 +357,6 @@ void make_plots( int m, std::string start ) {
                 cout << "Plot mode of sensor " << sensor_name[m] << " is 'displacement'." << endl;
         }
 
-
         else if ( sensor_name[m].find("TT") != std::string::npos ) {
                 fplotmode = plot_mode::temperature;
                 cout << "Plot mode of sensor " << sensor_name[m] << " is 'temperature'." << endl;
@@ -436,4 +453,3 @@ void make_plots( int m, std::string start ) {
         delete canvas;
         delete legend;
 }
-

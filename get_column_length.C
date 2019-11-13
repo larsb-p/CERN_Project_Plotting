@@ -139,7 +139,7 @@ void get_column_length( ) {
                 cout << " change to " << column_index[N_SENSORS - cmax + r] << " at " << i << ", sensors' columns found is " << N_SENSORS - cmax + r + 1 <<  endl;
 
                 columns.push_back(i);
-               sensorID.push_back( sensor_ID[ new_number[r] ] );
+                sensorID.push_back( sensor_ID[ new_number[r] ] );
             }
 
         cout << "--------------------------SENSORS------------------------------------------------" << endl;
@@ -190,7 +190,7 @@ void get_column_length( ) {
                 end_line = i;
                 if (column_count[m/2] == 111) { // if column has not been counted yet (tagged by 111)...
                     column_count[m/2] = i; // ...store respective line
-                  column_index[uu] = m/2;     // ...store column index
+                    column_index[uu] = m/2;     // ...store column index
 
                     cout << sensor_name[m/2] << " (" << sensor_ID[m/2] << "):";
                     cout << " change to sensor " << column_index[uu] << " at " << i -1 << ", sensors' columns found is " << uu +1 <<  "." << endl;
@@ -215,4 +215,3 @@ void get_column_length( ) {
 f->Close();
 return 0;
 }
-
